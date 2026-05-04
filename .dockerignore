@@ -1,0 +1,8 @@
+node_modules
+dist
+dist-api
+.git
+.gitignore
+*.log
+deploy/data
+deploy/.env

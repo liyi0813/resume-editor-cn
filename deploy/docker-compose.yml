@@ -1,0 +1,86 @@
+services:
+  resume-template-mysql:
+    image: mysql:8.0
+    container_name: resume-template-mysql
+    restart: unless-stopped
+    mem_limit: 512m
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-resume_template}
+      MYSQL_USER: ${MYSQL_USER:-resume}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --innodb-buffer-pool-size=64M
+      - --performance-schema=OFF
+      - --table-definition-cache=400
+      - --table-open-cache=200
+      - --max-connections=20
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u$${MYSQL_USER} -p$${MYSQL_PASSWORD} --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 40s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - resume-template-net
+
+  resume-template-api:
+    build:
+      context: ..
+      dockerfile: api/Dockerfile
+    container_name: resume-template-api
+    restart: unless-stopped
+    mem_limit: 192m
+    environment:
+      PORT: 3000
+      DB_HOST: resume-template-mysql
+      DB_PORT: 3306
+      DB_NAME: ${MYSQL_DATABASE:-resume_template}
+      DB_USER: ${MYSQL_USER:-resume}
+      DB_PASSWORD: ${MYSQL_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+      COOKIE_SECURE: ${COOKIE_SECURE:-false}
+    depends_on:
+      resume-template-mysql:
+        condition: service_healthy
+    expose:
+      - "3000"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - resume-template-net
+
+  resume-template-web:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    container_name: resume-template-web
+    restart: unless-stopped
+    mem_limit: 128m
+    depends_on:
+      - resume-template-api
+    ports:
+      - "${RESUME_WEB_PORT:-8081}:80"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - resume-template-net
+
+networks:
+  resume-template-net:
+    name: resume-template-net
