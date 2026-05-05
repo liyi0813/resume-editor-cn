@@ -458,15 +458,15 @@
 }
 
 .resume-page--first {
-  padding: 13mm 14.5mm 12mm;
+  padding: 10.5mm 14.5mm;
 }
 
 .resume-page--with-photo {
-  padding-top: 7.5mm;
+  padding: 10mm 14.5mm;
 }
 
 .resume-page--flow {
-  padding: 12mm 14.5mm;
+  padding: 10mm 14.5mm;
 }
 
 .resume-header {
@@ -706,15 +706,15 @@
   }
 
   .resume-page--first {
-    padding: 11mm 8mm 10mm;
+    padding: 9.5mm 8mm;
   }
 
   .resume-page--with-photo {
-    padding-top: 7mm;
+    padding: 9mm 8mm;
   }
 
   .resume-page--flow {
-    padding: 10mm 8mm;
+    padding: 9mm 8mm;
   }
 
   .syntax-help {
@@ -776,15 +776,15 @@
   }
 
   .resume-page--first {
-    padding: 13mm 14.5mm 12mm;
+    padding: 10.5mm 14.5mm;
   }
 
   .resume-page--with-photo {
-    padding-top: 7.5mm;
+    padding: 10mm 14.5mm;
   }
 
   .resume-page--flow {
-    padding: 12mm 14.5mm;
+    padding: 10mm 14.5mm;
   }
 
   .resume-page:last-child {
